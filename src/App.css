@@ -1169,8 +1169,8 @@ body {
 
 .verse-translation[lang="ur"] {
   font-family: 'Noto Nastaliq Urdu', system-ui;
-  font-size: 1.5rem;
-  line-height: 2.2;  /* Increased for better Nastaliq readability */
+  font-size: 1.1rem;
+  line-height: 1.6;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border);
