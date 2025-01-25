@@ -3,6 +3,7 @@ import { saveReadingProgress, getReadingProgress } from './utils/readingProgress
 import './App.css'
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedSurah, setSelectedSurah] = useState('1')
   const [selectedVerse, setSelectedVerse] = useState('')
   const [selectedLanguage, setSelectedLanguage] = useState('ar')
@@ -54,10 +55,10 @@ function App() {
         ur: urduData.default
       })
       setSurahNames(surahData.default.surahs)
+      setIsLoading(false)  // Add this line
     }
     loadData()
   }, [])
-
   // Filter verses when surah changes
   useEffect(() => {
     if (selectedSurah && translations.ar.length > 0) {
@@ -184,183 +185,188 @@ function App() {
   }
 
   return (
-    <div className="quran-app">
-      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h2>Surahs</h2>
-          <button 
-            className="close-sidebar"
-            onClick={handleCloseSidebar}
-          >
-            ×
-          </button>
-        </div>
-        <div className="sidebar-content">
-          {surahNames.map((surah) => (
-            <div key={surah.number} className="surah-item">
-              <button
-                className={`surah-btn ${selectedSurah === surah.number.toString() ? 'active' : ''}`}
-                onClick={() => {
-                  setSelectedSurah(surah.number.toString())
-                  handleCloseSidebar()
-                }}
-              >
-                <span className="surah-number">{surah.number}</span>
-                <div className="surah-info">
-                  <span className="surah-name">{surah.name}</span>
-                  <span className="surah-translation">{surah.translation}</span>
-                </div>
-              </button>
-              <button 
-                className="bookmark-btn"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  toggleSurahBookmark(surah.number)
-                }}
-              >
-                {bookmarkedSurahs.includes(surah.number) ? '★' : '☆'}
-              </button>
-            </div>
-          ))}
-        </div>
-      </aside>
-
-      <main className="main-section">
-        <nav className={`top-nav ${selectedLanguage !== 'ar' ? 'has-translation' : ''}`}>
-          <button 
-            className="menu-toggle"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-
-          <div className="logo">
-  <img 
-    src="/quranlogo.png"
-    alt="Quran App" 
-    onClick={() => window.location.reload()}
-    style={{ cursor: 'pointer' }}
-  />
-</div>
-
-
-          <div className="nav-controls">
-            <select
-              value={selectedLanguage}
-              onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="lang-select"
-            >
-              <option value="ar">عربي</option>
-              <option value="en">English</option>
-              <option value="ur">اردو</option>
-            </select>
-
-            {selectedLanguage !== 'ar' && (
-              <select
-                value={selectedTranslator}
-                onChange={(e) => setSelectedTranslator(e.target.value)}
-                className="translator-select"
-              >
-                {[...new Set(translations[selectedLanguage]
-                  .map(t => t.translator))]
-                  .map(translator => (
-                    <option key={translator} value={translator}>
-                      {translator}
-                    </option>
-                ))}
-              </select>
-            )}
-          </div>
-        </nav>
-
-        <div className="content">
-          <div className="verse-controls">
-            <div className="controls-wrapper">
-              <select
-                value={selectedVerse}
-                onChange={(e) => setSelectedVerse(e.target.value)}
-                className="verse-select"
-              >
-                <option value="">Select Verse</option>
-                {[...Array(Math.ceil(verses.length / 10))].map((_, groupIndex) => (
-                  <optgroup 
-                    key={groupIndex} 
-                    label={`Verses ${groupIndex * 10 + 1} - ${Math.min((groupIndex + 1) * 10, verses.length)}`}
-                  >
-                    {verses
-                      .slice(groupIndex * 10, (groupIndex + 1) * 10)
-                      .map(verse => (
-                        <option key={verse.verse} value={verse.verse}>
-                          Verse {verse.verse}
-                        </option>
-                      ))}
-                  </optgroup>
-                ))}
-              </select>
-              <button 
-                className="quick-jump-btn"
-                onClick={() => setQuickJumpVisible(true)}
-              >
-                Quick Jump
-              </button>
-            </div>
-          </div>
-
-          {quickJumpVisible && (
-            <QuickJumpPanel onClose={() => setQuickJumpVisible(false)} />
-          )}
-
-          <div className="verses-container">
-            {verses.map(verse => (
-              <div 
-                key={`${verse.surah}-${verse.verse}`}
-                className="verse-card"
-                data-verse={verse.verse}
-              >
-                <div className="verse-header">
-                  <span className="verse-number">{verse.verse}</span>
-                </div>
-                
-                <div className="verse-arabic" dir="rtl">
-                  {verse.text}
-                </div>
-                  {selectedLanguage !== 'ar' && (
-                    <div 
-                      className="verse-translation"
-                      lang={selectedLanguage}
-                      dir={selectedLanguage === 'ur' ? 'rtl' : 'ltr'}
-                    >
-                      {translations[selectedLanguage]?.find(
-                        t => t.surah === verse.surah && 
-                            t.verse === verse.verse &&
-                            (!selectedTranslator || t.translator === selectedTranslator)
-                      )?.text || ''}
-                    </div>
-                  )}
-                </div>
-            ))}
-          </div>
-        </div>
-      </main>
-
-      {showGuide && (
-        <div className="guide-popup">
-          <div className="guide-content">
-            <div className="guide-arrow">↖</div>
-            <p>Click the menu icon to explore Surahs</p>
+    isLoading ? (
+      <div className="loader-container">
+        <div className="loader"></div>
+      </div>
+    ) : (
+      <div className="quran-app">
+        <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+          <div className="sidebar-header">
+            <h2>Surahs</h2>
             <button 
-              className="guide-close"
-              onClick={() => setShowGuide(false)}
+              className="close-sidebar"
+              onClick={handleCloseSidebar}
             >
-              Got it
+              ×
             </button>
           </div>
-        </div>
-      )}
-    </div>
-  )
-}
+          <div className="sidebar-content">
+            {surahNames.map((surah) => (
+              <div key={surah.number} className="surah-item">
+                <button
+                  className={`surah-btn ${selectedSurah === surah.number.toString() ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedSurah(surah.number.toString())
+                    handleCloseSidebar()
+                  }}
+                >
+                  <span className="surah-number">{surah.number}</span>
+                  <div className="surah-info">
+                    <span className="surah-name">{surah.name}</span>
+                    <span className="surah-translation">{surah.translation}</span>
+                  </div>
+                </button>
+                <button 
+                  className="bookmark-btn"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleSurahBookmark(surah.number)
+                  }}
+                >
+                  {bookmarkedSurahs.includes(surah.number) ? '★' : '☆'}
+                </button>
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        <main className="main-section">
+          <nav className={`top-nav ${selectedLanguage !== 'ar' ? 'has-translation' : ''}`}>
+            <button 
+              className="menu-toggle"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+
+            <div className="logo">
+    <img 
+      src="/quranlogo.png"
+      alt="Quran App" 
+      onClick={() => window.location.reload()}
+      style={{ cursor: 'pointer' }}
+    />
+  </div>
+
+
+            <div className="nav-controls">
+              <select
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+                className="lang-select"
+              >
+                <option value="ar">عربي</option>
+                <option value="en">English</option>
+                <option value="ur">اردو</option>
+              </select>
+
+              {selectedLanguage !== 'ar' && (
+                <select
+                  value={selectedTranslator}
+                  onChange={(e) => setSelectedTranslator(e.target.value)}
+                  className="translator-select"
+                >
+                  {[...new Set(translations[selectedLanguage]
+                    .map(t => t.translator))]
+                    .map(translator => (
+                      <option key={translator} value={translator}>
+                        {translator}
+                      </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          </nav>
+
+          <div className="content">
+            <div className="verse-controls">
+              <div className="controls-wrapper">
+                <select
+                  value={selectedVerse}
+                  onChange={(e) => setSelectedVerse(e.target.value)}
+                  className="verse-select"
+                >
+                  <option value="">Select Verse</option>
+                  {[...Array(Math.ceil(verses.length / 10))].map((_, groupIndex) => (
+                    <optgroup 
+                      key={groupIndex} 
+                      label={`Verses ${groupIndex * 10 + 1} - ${Math.min((groupIndex + 1) * 10, verses.length)}`}
+                    >
+                      {verses
+                        .slice(groupIndex * 10, (groupIndex + 1) * 10)
+                        .map(verse => (
+                          <option key={verse.verse} value={verse.verse}>
+                            Verse {verse.verse}
+                          </option>
+                        ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <button 
+                  className="quick-jump-btn"
+                  onClick={() => setQuickJumpVisible(true)}
+                >
+                  Quick Jump
+                </button>
+              </div>
+            </div>
+
+            {quickJumpVisible && (
+              <QuickJumpPanel onClose={() => setQuickJumpVisible(false)} />
+            )}
+
+            <div className="verses-container">
+              {verses.map(verse => (
+                <div 
+                  key={`${verse.surah}-${verse.verse}`}
+                  className="verse-card"
+                  data-verse={verse.verse}
+                >
+                  <div className="verse-header">
+                    <span className="verse-number">{verse.verse}</span>
+                  </div>
+                
+                  <div className="verse-arabic" dir="rtl">
+                    {verse.text}
+                  </div>
+                    {selectedLanguage !== 'ar' && (
+                      <div 
+                        className="verse-translation"
+                        lang={selectedLanguage}
+                        dir={selectedLanguage === 'ur' ? 'rtl' : 'ltr'}
+                      >
+                        {translations[selectedLanguage]?.find(
+                          t => t.surah === verse.surah && 
+                              t.verse === verse.verse &&
+                              (!selectedTranslator || t.translator === selectedTranslator)
+                        )?.text || ''}
+                      </div>
+                    )}
+                  </div>
+              ))}
+            </div>
+          </div>
+        </main>
+
+        {showGuide && (
+          <div className="guide-popup">
+            <div className="guide-content">
+              <div className="guide-arrow">↖</div>
+              <p>Click the menu icon to explore Surahs</p>
+              <button 
+                className="guide-close"
+                onClick={() => setShowGuide(false)}
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  )}
 
 export default App
