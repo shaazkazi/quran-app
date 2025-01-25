@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600&display=swap');
+
 @font-face {
   font-family: 'Al Qalam Quran';
   src: url('./assets/Al_Qalam_Quran_Majeed.ttf') format('truetype');
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 @font-face {
   font-family: 'Indopak Nastaleeq';
   src: url('./assets/Jameel_Noori_Nastaleeq.ttf') format('truetype');
@@ -1166,13 +1168,14 @@ body {
 }
 
 .verse-translation[lang="ur"] {
-  font-family: 'Indopak Nastaleeq', Arial;
+  font-family: 'Noto Nastaliq Urdu', system-ui;
   font-size: 1.5rem;
-  line-height: 1.8;
+  line-height: 2.2;  /* Increased for better Nastaliq readability */
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border);
   color: var(--text-secondary);
+  text-align: right;
 }
 
 .verse-translation[lang="en"] {
