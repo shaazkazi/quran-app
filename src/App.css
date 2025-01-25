@@ -1273,3 +1273,28 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+.logo img {
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);  /* Makes the logo white */
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+/* When translation is open */
+.top-nav.has-translation .logo {
+  left: 40%;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    height: 32px;
+    position: static;
+    transform: none;
+    margin: 0 auto;
+  }
+  
+  .logo img {
+    filter: brightness(0) invert(1);  /* Explicitly set white filter for mobile */
+  }
+}
