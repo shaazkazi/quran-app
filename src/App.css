@@ -3,6 +3,13 @@
   src: url('./assets/Al_Qalam_Quran_Majeed.ttf') format('truetype');
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@font-face {
+  font-family: 'Indopak Nastaleeq';
+  src: url('./assets/Jameel_Noori_Nastaleeq.ttf') format('truetype');
+}
+
+
 :root {
   --bg: #1A1A2E;
   --surface: #16213E;
@@ -1149,4 +1156,31 @@ body {
 .verse-select {
   /* Keep existing styles */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+/* Language-specific typography */
+.verse-arabic {
+  font-family: 'Al Qalam Quran', Arial;
+  font-size: 1.75rem;
+  line-height: 2;
+  margin: 0.5rem 0;
+}
+
+.verse-translation[lang="ur"] {
+  font-family: 'Indopak Nastaleeq', Arial;
+  font-size: 1.5rem;
+  line-height: 1.8;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.verse-translation[lang="en"] {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
 }

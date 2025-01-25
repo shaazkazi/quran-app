@@ -326,20 +326,20 @@ function App() {
                 <div className="verse-arabic" dir="rtl">
                   {verse.text}
                 </div>
-
-                {selectedLanguage !== 'ar' && (
-                  <div 
-                    className="verse-translation"
-                    dir={selectedLanguage === 'ur' ? 'rtl' : 'ltr'}
-                  >
-                    {translations[selectedLanguage]?.find(
-                      t => t.surah === verse.surah && 
-                          t.verse === verse.verse &&
-                          (!selectedTranslator || t.translator === selectedTranslator)
-                    )?.text || ''}
-                  </div>
-                )}
-              </div>
+                  {selectedLanguage !== 'ar' && (
+                    <div 
+                      className="verse-translation"
+                      lang={selectedLanguage}
+                      dir={selectedLanguage === 'ur' ? 'rtl' : 'ltr'}
+                    >
+                      {translations[selectedLanguage]?.find(
+                        t => t.surah === verse.surah && 
+                            t.verse === verse.verse &&
+                            (!selectedTranslator || t.translator === selectedTranslator)
+                      )?.text || ''}
+                    </div>
+                  )}
+                </div>
             ))}
           </div>
         </div>
