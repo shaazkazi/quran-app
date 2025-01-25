@@ -238,7 +238,7 @@ function App() {
 
           <div className="logo">
   <img 
-    src="/src/assets/quranlogo.svg" 
+    src="/src/assets/quranlogo.png" 
     alt="Quran App" 
     onClick={() => window.location.reload()}
     style={{ cursor: 'pointer' }}

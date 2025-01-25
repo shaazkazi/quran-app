@@ -1184,3 +1184,54 @@ body {
   border-top: 1px solid var(--border);
   color: var(--text-secondary);
 }
+@media (max-width: 768px) {
+  .lang-select,
+  .translator-select {
+    min-width: 100px; /* Reduced from 150px */
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .nav-controls {
+    gap: 0.5rem; /* Reduced gap between selectors */
+  }
+}
+.logo {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+.logo img {
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.logo img:hover {
+  opacity: 0.8;
+}
+
+/* When translation is open */
+.top-nav.has-translation .logo {
+  left: 40%;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    height: 32px;
+    position: static;
+    transform: none;
+    margin: 0 auto;
+  }
+  
+  /* Remove filter since we're using PNG */
+  .logo img {
+    filter: none;
+  }
+}
