@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Play, Pause, BookOpen, Share2, Copy } from 'lucide-react'
 import VerseCard from './VerseCard'
 import ReadingProgress from './ReadingProgress'
+import SurahDropdown from './SurahDropdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const QuranReader = ({ settings, onSettingsChange }) => {
@@ -178,17 +179,10 @@ const QuranReader = ({ settings, onSettingsChange }) => {
             Previous
           </button>
 
-          <select
+          <SurahDropdown
             value={currentSurah}
             onChange={(e) => handleSurahChange(parseInt(e.target.value))}
-            className="surah-select"
-          >
-            {Array.from({ length: 114 }, (_, i) => i + 1).map(num => (
-              <option key={num} value={num}>
-                Surah {num}
-              </option>
-            ))}
-          </select>
+          />
 
           <button
             onClick={handleNextSurah}

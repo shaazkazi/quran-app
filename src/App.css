@@ -538,6 +538,10 @@ body {
   width: auto;
 }
 
+[data-theme="dark"] .logo-image {
+  filter: brightness(0) invert(1);
+}
+
 .logo-text {
   font-size: var(--text-lg);
   font-weight: 600;
